@@ -1,0 +1,12 @@
+<!-- Plugin Configuration File. Read more: https://plugins.jetbrains.com/docs/intellij/plugin-configuration-file.html -->
+<idea-plugin>
+    <id>sj.zheng</id>
+    <name>mdimg</name>
+    <vendor>SijayZheng</vendor>
+    <description>Paste the image into Markdown and save the image to the sibling img folder</description>
+    <depends>com.intellij.modules.platform</depends>
+    <resource-bundle>messages.MyBundle</resource-bundle>
+    <extensions defaultExtensionNs="com.intellij">
+        <editorActionHandler action="EditorPaste" implementationClass="sj.zheng.mdimg.PasteHandler" order="first"/>
+    </extensions>
+</idea-plugin>
