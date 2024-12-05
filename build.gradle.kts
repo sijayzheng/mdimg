@@ -1,51 +1,49 @@
-fun properties(key: String) = providers.gradleProperty(key)
-fun environment(key: String) = providers.environmentVariable(key)
-
 plugins {
     id("java")
-    id("org.jetbrains.kotlin.jvm") version "1.8.10"
-    id("org.jetbrains.intellij") version "1.13.2"
+    id("org.jetbrains.kotlin.jvm") version "1.9.25"
+    id("org.jetbrains.intellij") version "1.17.4"
 }
 
-group = properties("pluginGroup").get()
-version = properties("pluginVersion").get()
+group = "sj.zheng"
+version = "1.0.1"
 
 repositories {
-    maven {
-        setUrl("https://maven.aliyun.com/repository/public/")
-    }
     mavenCentral()
 }
 
+// Configure Gradle IntelliJ Plugin
+// Read more: https://plugins.jetbrains.com/docs/intellij/tools-gradle-intellij-plugin.html
 intellij {
-    pluginName.set(properties("pluginName"))
-    version.set(properties("platformVersion"))
-    type.set(properties("platformType"))
-    plugins.set(properties("platformPlugins").map { it.split(',').map(String::trim).filter(String::isNotEmpty) })
+    pluginName.set("mdimg")
+    version.set("2023.2.8")
+    type.set("IC") // Target IDE Platform
 }
-
-
 
 tasks {
     wrapper {
-        gradleVersion = properties("gradleVersion").get()
+        gradleVersion = "8.10.2"
     }
-    runIdeForUiTests {
-        systemProperty("robot-server.port", "8082")
-        systemProperty("ide.mac.message.dialogs.as.sheets", "false")
-        systemProperty("jb.privacy.policy.text", "<!--999.999-->")
-        systemProperty("jb.consents.confirmation.enabled", "false")
+    // Set the JVM compatibility versions
+    withType<JavaCompile> {
+        sourceCompatibility = "17"
+        targetCompatibility = "17"
+    }
+    withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
+        kotlinOptions.jvmTarget = "17"
+    }
+
+    patchPluginXml {
+        sinceBuild.set("232")
+        untilBuild.set("243.*")
     }
 
     signPlugin {
-        certificateChain.set(environment("CERTIFICATE_CHAIN"))
-        privateKey.set(environment("PRIVATE_KEY"))
-        password.set(environment("PRIVATE_KEY_PASSWORD"))
+        certificateChain.set(System.getenv("CERTIFICATE_CHAIN"))
+        privateKey.set(System.getenv("PRIVATE_KEY"))
+        password.set(System.getenv("PRIVATE_KEY_PASSWORD"))
     }
 
     publishPlugin {
-        token.set(environment("PUBLISH_TOKEN"))
-        channels.set(properties("pluginVersion").map { listOf(it.split('-').getOrElse(1) { "default" }.split('.').first()) })
+        token.set(System.getenv("PUBLISH_TOKEN"))
     }
-
 }

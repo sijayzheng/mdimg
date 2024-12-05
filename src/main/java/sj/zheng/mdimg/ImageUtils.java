@@ -1,12 +1,8 @@
 package sj.zheng.mdimg;
 
-
 import java.awt.*;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
-import java.awt.datatransfer.UnsupportedFlavorException;
-import java.io.IOException;
-
 
 public class ImageUtils {
 
@@ -21,12 +17,9 @@ public class ImageUtils {
             } else {
                 return null;
             }
-        } catch (UnsupportedFlavorException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            throw new RuntimeException();
+        } catch (Exception e) {
+            System.out.println("发生错误：" + e.getMessage());
+            return null;
         }
-
-        return null;
     }
 }

@@ -51,14 +51,15 @@ public class PasteHandler extends EditorActionHandler {
     @Override
     protected void doExecute(@NotNull Editor editor, @Nullable Caret caret, DataContext dataContext) {
         if (editor instanceof EditorEx) {
-            VirtualFile virtualFile = ((EditorEx) editor).getVirtualFile();
+            VirtualFile virtualFile = editor.getVirtualFile();
             if (virtualFile != null) {
                 FileType fileType = virtualFile.getFileType();
                 if ("markdown".equalsIgnoreCase(fileType.getName())) {
                     Image imageFromClipboard = ImageUtils.getImage();
                     if (imageFromClipboard != null) {
                         PasteAction action = new PasteAction();
-                        action.actionPerformed(new AnActionEvent(null, dataContext, ActionPlaces.UNKNOWN, action.getTemplatePresentation().clone(), ActionManager.getInstance(), 0));
+                        action.actionPerformed(new AnActionEvent(null, dataContext, ActionPlaces.UNKNOWN, action.getTemplatePresentation()
+                                                                                                                .clone(), ActionManager.getInstance(), 0));
                         return;
                     }
                 }

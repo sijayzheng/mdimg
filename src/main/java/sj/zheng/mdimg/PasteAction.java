@@ -33,7 +33,8 @@ public class PasteAction extends AnAction {
         if (ed == null || image == null) {
             return;
         }
-        Document currentDoc = Objects.requireNonNull(FileEditorManager.getInstance(Objects.requireNonNull(ed.getProject())).getSelectedTextEditor()).getDocument();
+        Document currentDoc = Objects.requireNonNull(FileEditorManager.getInstance(Objects.requireNonNull(ed.getProject())).getSelectedTextEditor())
+                                     .getDocument();
         VirtualFile currentFile = FileDocumentManager.getInstance().getFile(currentDoc);
         assert currentFile != null;
         BufferedImage bufferedImage;
@@ -49,7 +50,9 @@ public class PasteAction extends AnAction {
             bufferedImage = ImageUtil.createImage(w, h, BufferedImage.TYPE_INT_ARGB);
         }
         File imageDir = new File(curDocument.getParent(), "img");
-        if (!imageDir.exists() || !imageDir.isDirectory()) imageDir.mkdirs();
+        if (!imageDir.exists()) {
+            imageDir.mkdirs();
+        }
         String imageName = DateTimeFormatter.ofPattern("yyyyMMddHHmmss").format(LocalDateTime.now()) + ".png";
         File imageFile = new File(imageDir, imageName);
         try {
